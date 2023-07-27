@@ -1,0 +1,4 @@
+flask/.venv
+mysql_data/
+pg_data/
+POS4G.backup

@@ -1,0 +1,58 @@
+version: '3.3'
+services:
+  pg_db:
+    image: postgres
+    container_name: postgres-db
+    restart: always
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_DB: my_postgres
+      POSTGRES_USER: postgres-db
+      POSTGRES_PASSWORD: PassW0rd
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data
+    networks:
+      my_network:
+        ipv4_address: 172.19.0.1  # Specify the desired IP address
+
+  mysql_db:
+    image: mysql:5.7
+    container_name: mysql-db
+    restart: always
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_DATABASE: my_mysql
+      MYSQL_ROOT_PASSWORD: PassW0rd
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+    networks:
+      my_network:
+        ipv4_address: 172.19.0.2  # Specify the desired IP address
+
+  flask-api-sample:
+    build: ./flask
+    container_name: flask-api-sample
+    restart: always
+    ports:
+      - '5000:5000'
+    volumes:
+      - ./flask:/app
+    entrypoint: ["python", "/app/run.py"]
+    networks:
+      my_network:
+        ipv4_address: 172.19.0.3  # Specify the desired IP address
+
+  flask-api:
+    build: ../flask
+    container_name: flask-api
+    restart: always
+    ports:
+      - '7777:7777'
+    volumes:
+      - ./flask:/app
+    entrypoint: ["python", "/app/run.py"]
+    networks:
+      my_network:
+        ipv4_address: 172.19.0.4  # Specify the desired IP address
